@@ -171,7 +171,7 @@ class Trainer(object):
 
         # create criterion
         self.criterion = get_segmentation_loss(args.model, use_ohem=args.use_ohem, aux=args.aux,
-                                               aux_weight=args.aux_weight, ignore_index=-1).to(self.device)
+                                               aux_weight=args.aux_weight, ignore_index=-1, nclass=150).to(self.device)
 
         # optimizer, for model just includes pretrained, head and auxlayer
         params_list = list()
