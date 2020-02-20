@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from core.models.base_models.resnet import resnet18
 from core.nn import _ConvBNReLU
 
-__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys']
+__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys', 'get_bisenet_resnet18_ade']
 
 
 class BiSeNet(nn.Module):
@@ -204,7 +204,7 @@ def get_bisenet(dataset='citys', backbone='resnet18', pretrained=False, root='~/
     model = BiSeNet(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
     if pretrained:
         from .model_store import get_model_file
-        device = torch.device(kwargs['local_rank'])
+        device = torch.device(0)
         model.load_state_dict(torch.load(get_model_file('bisenet_%s_%s' % (backbone, acronyms[dataset]), root=root),
                               map_location=device))
     return model
@@ -212,6 +212,12 @@ def get_bisenet(dataset='citys', backbone='resnet18', pretrained=False, root='~/
 
 def get_bisenet_resnet18_citys(**kwargs):
     return get_bisenet('citys', 'resnet18', **kwargs)
+
+def get_bisenet_resnet18_ade(**kwargs):
+    return get_bisenet('ade20k', 'resnet18', **kwargs)
+
+def get_bisenet_resnet152_ade(**kwargs):
+    return get_bisenet('ade20k', 'resnet152', **kwargs)
 
 
 if __name__ == '__main__':

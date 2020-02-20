@@ -24,7 +24,7 @@ def short_hash(name):
     return _model_sha1[name][:8]
 
 
-def get_resnet_file(name, root='~/.torch/models'):
+def get_resnet_file(name, root='../models'):
     file_name = '{name}-{short_hash}'.format(name=name, short_hash=short_hash(name))
     root = os.path.expanduser(root)
 

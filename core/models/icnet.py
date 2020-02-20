@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from .segbase import SegBaseModel
 
 __all__ = ['ICNet', 'get_icnet', 'get_icnet_resnet50_citys',
-           'get_icnet_resnet101_citys', 'get_icnet_resnet152_citys']
+           'get_icnet_resnet101_citys', 'get_icnet_resnet152_citys', 'get_icnet_resnet50_ade', 'get_icnet_resnet152_ade']
 
 
 class ICNet(SegBaseModel):
@@ -108,7 +108,7 @@ class CascadeFeatureFusion(nn.Module):
         return x, x_low_cls
 
 
-def get_icnet(dataset='citys', backbone='resnet50', pretrained=False, root='~/.torch/models',
+def get_icnet(dataset='citys', backbone='resnet50', pretrained=False, root='/home/haresh/PycharmProjects/awesome-semantic-segmentation-pytorch/models',
               pretrained_base=True, **kwargs):
     acronyms = {
         'pascal_voc': 'pascal_voc',
@@ -121,7 +121,7 @@ def get_icnet(dataset='citys', backbone='resnet50', pretrained=False, root='~/.t
     model = ICNet(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
     if pretrained:
         from .model_store import get_model_file
-        device = torch.device(kwargs['local_rank'])
+        device = torch.device(0)
         model.load_state_dict(torch.load(get_model_file('icnet_%s_%s' % (backbone, acronyms[dataset]), root=root),
                               map_location=device))
     return model
@@ -130,13 +130,18 @@ def get_icnet(dataset='citys', backbone='resnet50', pretrained=False, root='~/.t
 def get_icnet_resnet50_citys(**kwargs):
     return get_icnet('citys', 'resnet50', **kwargs)
 
-
 def get_icnet_resnet101_citys(**kwargs):
     return get_icnet('citys', 'resnet101', **kwargs)
 
-
 def get_icnet_resnet152_citys(**kwargs):
     return get_icnet('citys', 'resnet152', **kwargs)
+
+def get_icnet_resnet152_ade(**kwargs):
+    return get_icnet('ade20k', 'resnet152', **kwargs)
+
+def get_icnet_resnet50_ade(**kwargs):
+    return get_icnet('ade20k', 'resnet50', **kwargs)
+
 
 
 if __name__ == '__main__':

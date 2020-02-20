@@ -232,7 +232,7 @@ def resnet152_v1b(pretrained=False, **kwargs):
     return model
 
 
-def resnet50_v1s(pretrained=False, root='~/.torch/models', **kwargs):
+def resnet50_v1s(pretrained=False, root='/home/haresh/PycharmProjects/awesome-semantic-segmentation-pytorch/models', **kwargs):
     model = ResNetV1b(BottleneckV1b, [3, 4, 6, 3], deep_stem=True, **kwargs)
     if pretrained:
         from ..model_store import get_resnet_file
@@ -240,7 +240,7 @@ def resnet50_v1s(pretrained=False, root='~/.torch/models', **kwargs):
     return model
 
 
-def resnet101_v1s(pretrained=False, root='~/.torch/models', **kwargs):
+def resnet101_v1s(pretrained=False, root='/home/haresh/PycharmProjects/awesome-semantic-segmentation-pytorch/models', **kwargs):
     model = ResNetV1b(BottleneckV1b, [3, 4, 23, 3], deep_stem=True, **kwargs)
     if pretrained:
         from ..model_store import get_resnet_file
@@ -248,7 +248,7 @@ def resnet101_v1s(pretrained=False, root='~/.torch/models', **kwargs):
     return model
 
 
-def resnet152_v1s(pretrained=False, root='~/.torch/models', **kwargs):
+def resnet152_v1s(pretrained=False, root='/home/haresh/PycharmProjects/awesome-semantic-segmentation-pytorch/models', **kwargs):
     model = ResNetV1b(BottleneckV1b, [3, 8, 36, 3], deep_stem=True, **kwargs)
     if pretrained:
         from ..model_store import get_resnet_file
