@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from core.models.base_models.resnet import resnet18
 from core.nn import _ConvBNReLU
 
-__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys', 'get_bisenet_resnet18_ade', 'get_bisenet_resnet18_ycb']
+__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys', 'get_bisenet_resnet18_ade', 'get_bisenet_resnet18_ycb', 'get_bisenet_resnet18_robocup']
 
 
 class BiSeNet(nn.Module):
@@ -200,6 +200,7 @@ def get_bisenet(dataset='citys', backbone='resnet18', pretrained=False, root='~/
         'coco': 'coco',
         'citys': 'citys',
         'ycb': 'ycb',
+        'robocup': 'robocup',
     }
     from ..data.dataloader import datasets
     model = BiSeNet(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
@@ -222,6 +223,9 @@ def get_bisenet_resnet152_ade(**kwargs):
 
 def get_bisenet_resnet18_ycb(**kwargs):
     return get_bisenet('ycb', 'resnet18', **kwargs)
+
+def get_bisenet_resnet18_robocup(**kwargs):
+    return get_bisenet('robocup', 'resnet18', **kwargs)
 
 if __name__ == '__main__':
     img = torch.randn(2, 3, 224, 224)

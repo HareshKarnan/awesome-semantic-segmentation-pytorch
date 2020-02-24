@@ -51,6 +51,7 @@ _models = {
     'bisenet_resnet18_citys': get_bisenet_resnet18_citys,
     'bisenet_resnet18_ade': get_bisenet_resnet18_ade,
     'bisenet_resnet18_ycb': get_bisenet_resnet18_ycb,
+    'bisenet_resnet18_robocup': get_bisenet_resnet18_robocup,
     # 'bisenet_resnet152_ade': get_bisenet_resnet152_ade,
     'encnet_resnet50_ade': get_encnet_resnet50_ade,
     'encnet_resnet101_ade': get_encnet_resnet101_ade,

@@ -45,7 +45,7 @@ def parse_args():
                         help='backbone name (default: vgg16)')
     parser.add_argument('--dataset', type=str, default='pascal_voc',
                         choices=['pascal_voc', 'pascal_aug', 'ade20k',
-                                 'citys', 'sbu', 'ycb'],
+                                 'citys', 'sbu', 'ycb', 'robocup'],
                         help='dataset name (default: pascal_voc)')
     parser.add_argument('--base-size', type=int, default=520,
                         help='base image size')

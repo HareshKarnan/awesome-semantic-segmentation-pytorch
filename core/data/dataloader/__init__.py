@@ -8,6 +8,7 @@ from .pascal_voc import VOCSegmentation
 from .pascal_aug import VOCAugSegmentation
 from .sbu_shadow import SBUSegmentation
 from .ycb import YCBSegmentation
+from .robocup import RobocupSegmentation
 
 datasets = {
     'ade20k': ADE20KSegmentation,
@@ -17,6 +18,7 @@ datasets = {
     'citys': CitySegmentation,
     'sbu': SBUSegmentation,
     'ycb': YCBSegmentation,
+    'robocup': RobocupSegmentation,
 }
 
 
