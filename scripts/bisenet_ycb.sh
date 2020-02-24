@@ -3,8 +3,9 @@
 # train
 CUDA_VISIBLE_DEVICES=0
 
-python train_parallel.py --model bisenet \
+python3.6 train_parallel.py --model bisenet \
     --backbone resnet18 --dataset ycb \
-    --lr 0.0001 --epochs 10 --gpu-ids 0 \
-    --batch-size 16 \
-    --save-dir $SEG_HOME'/models'
+    --lr 0.0001 --epochs 100 --gpu-ids 0 \
+    --batch-size 32 \
+    --save-dir $SEG_HOME'/models' \
+    --resume $SEG_HOME/models/bisenet_resnet18_ycb_best_model.pth

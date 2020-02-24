@@ -59,9 +59,11 @@ def get_resnet_file(name, root='../models'):
         raise ValueError('Downloaded file has different hash. Please try again.')
 
 
-def get_model_file(name, root='~/.torch/models'):
+def get_model_file(name, root='$SEG_HOME/models'):
+
+
     root = os.path.expanduser(root)
-    file_path = os.path.join(root, name + '.pth')
+    file_path = os.path.join(root+'/models', name + '.pth')
     if os.path.exists(file_path):
         return file_path
     else:
