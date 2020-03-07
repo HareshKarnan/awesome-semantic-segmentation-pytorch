@@ -2,6 +2,8 @@ import os
 import sys
 import argparse
 import torch
+import numpy as np
+import cv2
 
 cur_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(cur_path)[0]
@@ -49,9 +51,17 @@ def demo(config):
         output = model(images)
 
     pred = torch.argmax(output[0], 1).squeeze(0).cpu().data.numpy()
+    print('predicted masks : ', np.unique(pred))
+
     mask = get_color_pallete(pred, args.dataset)
     outname = os.path.splitext(os.path.split(args.input_pic)[-1])[0] + '.png'
     mask.save(os.path.join(args.outdir, outname))
+    mask = cv2.imread(os.path.join(args.outdir, outname), cv2.IMREAD_COLOR)
+    mask = cv2.cvtColor(mask,cv2.COLOR_BGR2RGB)
+    blended = cv2.addWeighted(np.array(image), 0.5, mask, 0.5, 0.0)
+    blended = cv2.cvtColor(blended, cv2.COLOR_RGB2BGR)
+    cv2.imwrite(os.path.join(args.outdir, outname), blended)
+
 
 
 if __name__ == '__main__':

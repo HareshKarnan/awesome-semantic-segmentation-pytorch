@@ -64,6 +64,7 @@ _models = {
     'icnet_resnet152_ade': get_icnet_resnet152_ade,
     'icnet_resnet101_citys': get_icnet_resnet101_citys,
     'icnet_resnet152_citys': get_icnet_resnet152_citys,
+    'icnet_resnet50_robocup': get_icnet_resnet50_robocup,
     'enet_citys': get_enet_citys,
     'base_ocnet_resnet101_citys': get_base_ocnet_resnet101_citys,
     'pyramid_ocnet_resnet101_citys': get_pyramid_ocnet_resnet101_citys,

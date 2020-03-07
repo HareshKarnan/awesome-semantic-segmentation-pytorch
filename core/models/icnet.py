@@ -6,7 +6,8 @@ import torch.nn.functional as F
 from .segbase import SegBaseModel
 
 __all__ = ['ICNet', 'get_icnet', 'get_icnet_resnet50_citys',
-           'get_icnet_resnet101_citys', 'get_icnet_resnet152_citys', 'get_icnet_resnet50_ade', 'get_icnet_resnet152_ade']
+           'get_icnet_resnet101_citys', 'get_icnet_resnet152_citys', 'get_icnet_resnet50_ade', 'get_icnet_resnet152_ade',
+           'get_icnet_resnet50_robocup', 'get_icnet_resnet152_robocup']
 
 
 class ICNet(SegBaseModel):
@@ -116,6 +117,7 @@ def get_icnet(dataset='citys', backbone='resnet50', pretrained=False, root='/hom
         'ade20k': 'ade',
         'coco': 'coco',
         'citys': 'citys',
+        'robocup': 'robocup'
     }
     from ..data.dataloader import datasets
     model = ICNet(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
@@ -142,7 +144,11 @@ def get_icnet_resnet152_ade(**kwargs):
 def get_icnet_resnet50_ade(**kwargs):
     return get_icnet('ade20k', 'resnet50', **kwargs)
 
+def get_icnet_resnet50_robocup(**kwargs):
+    return get_icnet('robocup', 'resnet50', **kwargs)
 
+def get_icnet_resnet152_robocup(**kwargs):
+    return get_icnet('robocup', 'resnet152', **kwargs)
 
 if __name__ == '__main__':
     img = torch.randn(1, 3, 256, 256)

@@ -35,21 +35,21 @@ class RobocupSegmentation(SegmentationDataset):
     >>>     num_workers=4)
     """
     BASE_DIR = 'YCBSubData'
-    NUM_CLASS = 21
+    NUM_CLASS = 8
 
     def __init__(self, root='../datasets/robocup_subset', split='test', mode=None, transform=None, **kwargs):
         super(RobocupSegmentation, self).__init__(root, split, mode, transform, **kwargs)
         # root = os.path.join(root, self.BASE_DIR)
         self.root = root
         assert os.path.exists(root), "Please download the robocup_subset training data into the folder ../datasets/robocup_subset"
-        self.images, self.masks = _get_ycb_pairs(root, split)
+        self.images, self.masks = _get_image_pairs(root, split)
         assert (len(self.images) == len(self.masks))
         if len(self.images) == 0:
             raise RuntimeError("Found 0 images in subfolders of:" + root + "\n")
         print('Found {} images in the folder {}'.format(len(self.images), root))
 
-        self.valid_classes = [0, 10, 25, 50, 125, 175, 200, 210, 235]
-        self._key = np.arange(-1, len(self.valid_classes)-1)
+        self.valid_classes = list(np.linspace(-1, 150, 9).astype(np.int32))[1:]
+        self._key = np.arange(1, len(self.valid_classes)+1)
         self.mapping = {self.valid_classes[i]:self._key[i] for i in range(len(self.valid_classes))}
 
     def __getitem__(self, index):
@@ -79,7 +79,7 @@ class RobocupSegmentation(SegmentationDataset):
         return mask
 
     def _mask_transform(self, mask):
-        return torch.LongTensor(np.array(self._classes_2_index(mask)).astype('int32'))
+        return torch.LongTensor(self._classes_2_index(mask).astype('int32'))
 
     def __len__(self):
         return len(self.images)
@@ -91,11 +91,11 @@ class RobocupSegmentation(SegmentationDataset):
     def classes(self):
         """Category names."""
 
-        return ("chips_can", "gelatin_box","potted_meat_can","pudding_box","red_cup","soylent","tomato_soup_can", \
+        return ("chips_can", "gelatin_box", "potted_meat_can", "pudding_box", "red_cup", "soylent", "tomato_soup_can", \
                 "tuna_fish_can")
 
 
-def _get_ycb_pairs(folder, mode='train'):
+def _get_image_pairs(folder, mode='train'):
     img_paths = []
     mask_paths = []
     if mode == 'train':

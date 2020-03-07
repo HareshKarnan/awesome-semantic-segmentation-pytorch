@@ -3,10 +3,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from core.models.base_models.resnet import resnet18
+from core.models.base_models.resnet import resnet18, resnet101, resnet152, resnet50
 from core.nn import _ConvBNReLU
 
-__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys', 'get_bisenet_resnet18_ade', 'get_bisenet_resnet18_ycb', 'get_bisenet_resnet18_robocup']
+__all__ = ['BiSeNet', 'get_bisenet', 'get_bisenet_resnet18_citys', 'get_bisenet_resnet18_ade', 'get_bisenet_resnet18_ycb',
+           'get_bisenet_resnet18_robocup', 'get_bisenet_resnet101_robocup', 'get_bisenet_resnet152_robocup']
 
 
 class BiSeNet(nn.Module):
@@ -26,6 +27,7 @@ class BiSeNet(nn.Module):
                              'spatial_path', 'context_path', 'ffm', 'head'])
 
     def forward(self, x):
+        # print('img size : ', x.size())
         size = x.size()[2:]
         spatial_out = self.spatial_path(x)
         context_out = self.context_path(x)
@@ -118,6 +120,12 @@ class ContextPath(nn.Module):
         super(ContextPath, self).__init__()
         if backbone == 'resnet18':
             pretrained = resnet18(pretrained=pretrained_base, **kwargs)
+        elif backbone == 'resnet101':
+            pretrained = resnet101(pretrained=pretrained_base, **kwargs)
+        elif backbone == 'resnet50':
+            pretrained = resnet50(pretrained=pretrained_base, **kwargs)
+        elif backbone == 'resnet152':
+            pretrained = resnet152(pretrained=pretrained_base, **kwargs)
         else:
             raise RuntimeError('unknown backbone: {}'.format(backbone))
         self.conv1 = pretrained.conv1
@@ -226,6 +234,15 @@ def get_bisenet_resnet18_ycb(**kwargs):
 
 def get_bisenet_resnet18_robocup(**kwargs):
     return get_bisenet('robocup', 'resnet18', **kwargs)
+
+def get_bisenet_resnet50_robocup(**kwargs):
+    return get_bisenet('robocup', 'resnet50', **kwargs)
+
+def get_bisenet_resnet101_robocup(**kwargs):
+    return get_bisenet('robocup', 'resnet101', **kwargs)
+
+def get_bisenet_resnet152_robocup(**kwargs):
+    return get_bisenet('robocup', 'resnet152', **kwargs)
 
 if __name__ == '__main__':
     img = torch.randn(2, 3, 224, 224)
