@@ -120,12 +120,12 @@ class ContextPath(nn.Module):
         super(ContextPath, self).__init__()
         if backbone == 'resnet18':
             pretrained = resnet18(pretrained=pretrained_base, **kwargs)
-        elif backbone == 'resnet101':
-            pretrained = resnet101(pretrained=pretrained_base, **kwargs)
-        elif backbone == 'resnet50':
-            pretrained = resnet50(pretrained=pretrained_base, **kwargs)
-        elif backbone == 'resnet152':
-            pretrained = resnet152(pretrained=pretrained_base, **kwargs)
+        # elif backbone == 'resnet101':
+        #     pretrained = resnet101(pretrained=pretrained_base, **kwargs)
+        # elif backbone == 'resnet50':
+        #     pretrained = resnet50(pretrained=pretrained_base, **kwargs)
+        # elif backbone == 'resnet152':
+        #     pretrained = resnet152(pretrained=pretrained_base, **kwargs)
         else:
             raise RuntimeError('unknown backbone: {}'.format(backbone))
         self.conv1 = pretrained.conv1

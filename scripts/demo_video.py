@@ -23,12 +23,13 @@ parser.add_argument('--dataset', type=str, default='pascal_aug', choices=['pasca
                     help='dataset name (default: pascal_voc)')
 parser.add_argument('--save-folder', default='~/.torch/models',
                     help='Directory for saving checkpoint models')
-parser.add_argument('--input-video', type=str, default='../datasets/xtion_video2.mp4',
+parser.add_argument('--input-video', type=str, default='../datasets/xtion_video.mp4',
                     help='path to the input video file')
 parser.add_argument('--outdir', default='./eval', type=str,
                     help='path to save the resulting video file')
-parser.add_argument('--out_video_name', default='xtion_video2.avi', type=str,
+parser.add_argument('--out_video_name', default='xtion_video.avi', type=str,
                     help='path to save the resulting video file')
+parser.add_argument('--display', action='store_true', default='true')
 
 args = parser.parse_args()
 
@@ -80,6 +81,9 @@ def demo(config):
         mask = cv2.imread(os.path.join(args.outdir, outname)) #in BGR
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         blended = cv2.addWeighted(image, 0.5, mask, 0.5, 0.0)
+        if args.display:
+            cv2.imshow('output', blended)
+            cv2.waitKey(1)
         out.write(blended)
         pbar.update(1)
 

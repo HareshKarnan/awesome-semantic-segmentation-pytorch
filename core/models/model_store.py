@@ -61,8 +61,8 @@ def get_resnet_file(name, root='../models'):
 
 def get_model_file(name, root='$SEG_HOME/models'):
 
-
-    root = os.path.expanduser(root)
+    # root = os.path.expanduser(root)
+    root = os.getenv('SEG_HOME')
     file_path = os.path.join(root+'/models', name + '.pth')
     if os.path.exists(file_path):
         return file_path

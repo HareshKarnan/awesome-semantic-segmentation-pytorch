@@ -35,7 +35,7 @@ class RobocupSegmentation(SegmentationDataset):
     >>>     num_workers=4)
     """
     BASE_DIR = 'YCBSubData'
-    NUM_CLASS = 8
+    NUM_CLASS = 9
 
     def __init__(self, root='../datasets/robocup_subset', split='test', mode=None, transform=None, **kwargs):
         super(RobocupSegmentation, self).__init__(root, split, mode, transform, **kwargs)
@@ -48,9 +48,11 @@ class RobocupSegmentation(SegmentationDataset):
             raise RuntimeError("Found 0 images in subfolders of:" + root + "\n")
         print('Found {} images in the folder {}'.format(len(self.images), root))
 
-        self.valid_classes = list(np.linspace(-1, 150, 9).astype(np.int32))[1:]
-        self._key = np.arange(1, len(self.valid_classes)+1)
-        self.mapping = {self.valid_classes[i]:self._key[i] for i in range(len(self.valid_classes))}
+        # self.valid_classes = [0]+list(np.linspace(-1, 150, 9).astype(np.int32))[1:]
+        # self.valid_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        # print('expecting labels : ', self.valid_classes)
+        # self._key = np.arange(-1, len(self.valid_classes)-1)
+        # self.mapping = {self.valid_classes[i]:self._key[i] for i in range(len(self.valid_classes))}
 
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
@@ -60,6 +62,7 @@ class RobocupSegmentation(SegmentationDataset):
                 img = self.transform(img)
             return img, os.path.basename(self.images[index])
         mask = Image.open(self.masks[index])
+
         # synchrosized transform
         if self.mode == 'train':
             img, mask = self._sync_transform(img, mask)
@@ -74,12 +77,14 @@ class RobocupSegmentation(SegmentationDataset):
         return img, mask, os.path.basename(self.images[index])
 
     def _classes_2_index(self, mask):
-        for class_num in self.valid_classes:
+        detected_classes = np.unique(mask)
+        for class_num in detected_classes:
             mask = np.where(mask==class_num, self.mapping[class_num], mask)
         return mask
 
     def _mask_transform(self, mask):
-        return torch.LongTensor(self._classes_2_index(mask).astype('int32'))
+        # mask = self._classes_2_index(np.array(mask).astype('int32'))
+        return torch.LongTensor(np.array(mask).astype('int32'))
 
     def __len__(self):
         return len(self.images)
@@ -87,12 +92,13 @@ class RobocupSegmentation(SegmentationDataset):
     @property
     def pred_offset(self):
         return 1
+        # return 0
 
     def classes(self):
         """Category names."""
 
         return ("chips_can", "gelatin_box", "potted_meat_can", "pudding_box", "red_cup", "soylent", "tomato_soup_can", \
-                "tuna_fish_can")
+                "tuna_fish_can", "none")
 
 
 def _get_image_pairs(folder, mode='train'):
@@ -103,11 +109,11 @@ def _get_image_pairs(folder, mode='train'):
     else:
         img_folder = os.path.join(folder, 'test/rgb')
 
-    img_paths = glob.glob(img_folder+'/*.jpg', recursive=True)
+    img_paths = glob.glob(img_folder+'/*.jpg')
 
     for img_path in img_paths :
         mask_path = img_path.replace('rgb', 'mask')
-        mask_path = ".".join(mask_path.split('.')[:-1])+'.png'
+        mask_path = mask_path.replace('jpg', 'png')
         mask_paths.append(mask_path)
 
     assert len(img_paths)==len(mask_paths), "Dataset Corrupted. Please make the dataset again using process_dataset.py"
