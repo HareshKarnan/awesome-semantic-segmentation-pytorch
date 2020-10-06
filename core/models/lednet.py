@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 from core.nn import _ConvBNReLU
 
-__all__ = ['LEDNet', 'get_lednet', 'get_lednet_citys']
+__all__ = ['LEDNet', 'get_lednet', 'get_lednet_citys', 'get_lednet_robocup']
 
 class LEDNet(nn.Module):
     r"""LEDNet
@@ -175,6 +175,7 @@ def get_lednet(dataset='citys', backbone='', pretrained=False, root='~/.torch/mo
         'ade20k': 'ade',
         'coco': 'coco',
         'citys': 'citys',
+        'robocup': 'robocup',
     }
     from ..data.dataloader import datasets
     model = LEDNet(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
@@ -189,6 +190,8 @@ def get_lednet(dataset='citys', backbone='', pretrained=False, root='~/.torch/mo
 def get_lednet_citys(**kwargs):
     return get_lednet('citys', **kwargs)
 
+def get_lednet_robocup(**kwargs):
+    return get_lednet('robocup', **kwargs)
 
 if __name__ == '__main__':
     model = get_lednet_citys()

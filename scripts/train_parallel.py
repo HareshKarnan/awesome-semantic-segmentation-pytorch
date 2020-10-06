@@ -229,8 +229,8 @@ class Trainer(object):
         self.model.train()
         for iteration, (images, targets, _) in enumerate(self.train_loader):
             iteration = iteration + 1
-            for val in np.unique(targets.numpy()):
-                if val<0: input('Found negative target. Quitting')
+            # for val in np.unique(targets.numpy()):
+            #     if val<0: input('Found negative target. Quitting')
 
             images = images.to(self.device)
             targets = targets.to(self.device)

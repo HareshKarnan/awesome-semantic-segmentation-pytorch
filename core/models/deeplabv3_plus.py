@@ -7,7 +7,7 @@ from .deeplabv3 import _ASPP
 from .fcn import _FCNHead
 from ..nn import _ConvBNReLU
 
-__all__ = ['DeepLabV3Plus', 'get_deeplabv3_plus', 'get_deeplabv3_plus_xception_voc']
+__all__ = ['DeepLabV3Plus', 'get_deeplabv3_plus', 'get_deeplabv3_plus_xception_voc', 'get_deeplabv3_plus_resnet18_robocup']
 
 
 class DeepLabV3Plus(nn.Module):
@@ -116,12 +116,16 @@ class _DeepLabHead(nn.Module):
 
 def get_deeplabv3_plus(dataset='pascal_voc', backbone='xception', pretrained=False, root='~/.torch/models',
                        pretrained_base=True, **kwargs):
+    if 'jpu' in kwargs.keys():
+        del kwargs['jpu']
+        print('kwargs now : ', kwargs.keys())
     acronyms = {
         'pascal_voc': 'pascal_voc',
         'pascal_aug': 'pascal_aug',
         'ade20k': 'ade',
         'coco': 'coco',
         'citys': 'citys',
+        'robocup' : 'robocup',
     }
     from ..data.dataloader import datasets
     model = DeepLabV3Plus(datasets[dataset].NUM_CLASS, backbone=backbone, pretrained_base=pretrained_base, **kwargs)
@@ -137,6 +141,8 @@ def get_deeplabv3_plus(dataset='pascal_voc', backbone='xception', pretrained=Fal
 def get_deeplabv3_plus_xception_voc(**kwargs):
     return get_deeplabv3_plus('pascal_voc', 'xception', **kwargs)
 
+def get_deeplabv3_plus_resnet18_robocup(**kwargs):
+    return get_deeplabv3_plus('robocup', 'resnet18', **kwargs)
 
 if __name__ == '__main__':
     model = get_deeplabv3_plus_xception_voc()
